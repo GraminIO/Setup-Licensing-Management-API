@@ -1,5 +1,4 @@
 import json
-
 from flask import Flask, request, redirect, render_template, jsonify, make_response
 from security import token_required, secret_key, encrypted_data
 import datetime
@@ -8,20 +7,8 @@ import common_function as cf
 import pandas as pd
 from user import User
 import hashlib
-from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
-SWAGGER_URL="/swagger"
-API_URL="/static/swagger.json"
-
-swagger_ui_blueprint = get_swaggerui_blueprint(
-    SWAGGER_URL,
-    API_URL,
-    config={
-        'app_name': 'Access API'
-    }
-)
-app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
 
 @app.route('/')
