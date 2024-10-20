@@ -18,7 +18,8 @@ def index():
 def login():
     auth = request.authorization
     if auth and auth.password == "password":
-        user = User(encrypted_data(auth.username), encrypted_data(auth.password))
+        # user = User(encrypted_data(auth.username), encrypted_data(auth.password))
+        user = User(auth.username, auth.password)
         cf.get_save_file(1, user.toJson())
         token = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow(
         ) + datetime.timedelta(seconds=60)}, secret_key)
