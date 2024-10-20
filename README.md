@@ -6,4 +6,4 @@ activate virtual env: myenv\Scripts\activate.bat
 
 install requirements: pip install -r requirements.txt
 
-run application: py manage.py runserver
+run application: py main.py

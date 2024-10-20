@@ -29,25 +29,6 @@ def create_login():
         return f'<a href="http://localhost:5000/get_system_list?token={token}">Private link</a>'
     return make_response('Could not Verify', 401, {'WWW-Authenticate': 'Basic realm ="Login Required"'})
 
-
-# @app.route("/login", methods=['POST'])
-# def login():
-#     data = request.get_json()
-#     username = data['username']
-#     password = data['password']
-
-#     filename = cf.get_save_file(1)
-#     with open(filename, 'r') as file:
-#         data = json.loads(json.load(file))
-#         print(data)
-
-#     user = User(data['name'], data['password'])
-#     pwd = hashlib.md5(password.encode("utf-8")).hexdigest()
-#     if str(username).lower() == user.name and pwd == user.password:
-#         token = jwt.encode({'user': username, 'exp': datetime.datetime.utcnow(
-#         ) + datetime.timedelta(seconds=60)}, secret_key)
-#         return f'{secret_key}'
-
 @app.route("/login", methods=['POST'])
 def login():
     try:
