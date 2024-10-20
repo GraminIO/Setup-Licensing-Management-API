@@ -7,9 +7,10 @@ import common_function as cf
 import pandas as pd
 from user import User
 import hashlib
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/')
 def index():
@@ -29,24 +30,76 @@ def create_login():
     return make_response('Could not Verify', 401, {'WWW-Authenticate': 'Basic realm ="Login Required"'})
 
 
+# @app.route("/login", methods=['POST'])
+# def login():
+#     data = request.get_json()
+#     username = data['username']
+#     password = data['password']
+
+#     filename = cf.get_save_file(1)
+#     with open(filename, 'r') as file:
+#         data = json.loads(json.load(file))
+#         print(data)
+
+#     user = User(data['name'], data['password'])
+#     pwd = hashlib.md5(password.encode("utf-8")).hexdigest()
+#     if str(username).lower() == user.name and pwd == user.password:
+#         token = jwt.encode({'user': username, 'exp': datetime.datetime.utcnow(
+#         ) + datetime.timedelta(seconds=60)}, secret_key)
+#         return f'{secret_key}'
+
 @app.route("/login", methods=['POST'])
 def login():
-    data = request.get_json()
-    username = data['username']
-    password = data['password']
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
 
-    filename = cf.get_save_file(1)
-    with open(filename, 'r') as file:
-        data = json.loads(json.load(file))
-        print(data)
+        if not username or not password:
+            return jsonify({
+                'status': 'fail',
+                'message': 'Username and password are required',
+                'data': None
+            }), 400
 
-    user = User(data['name'], data['password'])
-    pwd = hashlib.md5(password.encode("utf-8")).hexdigest()
-    if str(username).lower() == user.name and pwd == user.password:
-        token = jwt.encode({'user': username, 'exp': datetime.datetime.utcnow(
-        ) + datetime.timedelta(seconds=60)}, secret_key)
-        return f'{secret_key}'
+        filename = cf.get_save_file(1)
+        with open(filename, 'r') as file:
+            file_data = json.loads(json.load(file))
 
+        user = User(file_data['name'], file_data['password'])
+        hashed_password = hashlib.md5(password.encode("utf-8")).hexdigest()
+
+        if str(username).lower() == user.name and hashed_password == user.password:
+            token = jwt.encode({
+                'user': username,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60)
+            }, secret_key)
+
+            return jsonify({
+                'status': 'success',
+                'message': 'Login successful',
+                'data': {'token': token}
+            }), 200
+        else:
+            return jsonify({
+                'status': 'fail',
+                'message': 'Invalid username or password',
+                'data': None
+            }), 401
+
+    except FileNotFoundError:
+        return jsonify({
+            'status': 'error',
+            'message': 'User data file not found',
+            'data': None
+        }), 500
+
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e),
+            'data': None
+        }), 500
 
 @app.route("/change_password", methods=['GET', 'POST'])
 # @token_required

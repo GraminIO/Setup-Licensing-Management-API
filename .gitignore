@@ -1,0 +1,70 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environments
+venv/
+ENV/
+env/
+myenv/
+.venv/
+
+# Flask settings
+instance/
+config.py
+.env
+*.env
+
+# Logs
+*.log
+*.log.*
+
+# Local development files
+*.local
+*.swp
+*.swo
+*.swn
+
+# macOS files
+.DS_Store
+
+# Database
+*.sqlite3
+*.db
+*.sqlite
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+*.cover
+coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.pyo
+*.pyd
+
+# PyInstaller
+*.spec
+
+# Celery beat schedule files
+celerybeat-schedule.*
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Static files compiled at runtime
+/static/
+
+# Deployment
+*.pid
